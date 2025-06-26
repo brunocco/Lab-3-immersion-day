@@ -10,7 +10,7 @@ Passo a passo do Laboratório do evento Immersion day focado na criação e conf
 2. [Objetivos do Laboratório](#este-laboratório-orientará-você-sobre-o-seguinte)  
 3. [Legenda do Texto do Laboratório](#legenda-do-texto-do-laboratório)  
 4. [Duração do Laboratório](#duração-do-laboratório)  
-5. [💰 Custos do Laboratório](#💰-custos-de-laboratório)  
+5. [Custos do Laboratório](#custos-de-laboratório)  
 6. [Pré-requisitos](#pré-requisitos)  
 7. [Iniciando com CloudFormation](#baixe-e-inicie-o-modelo-cloudformation)  
 8. [Confirmando Instância EC2](#confirme-a-configuração-bem-sucedida-da-sua-instância)  
@@ -49,7 +49,7 @@ Este laboratório foi desenvolvido para lhe dar alguma experiência na interaç�
 ## Duração do laboratório
 Este laboratório levará cerca de 1 hora para ser concluído.
 
-## 💰 Custos de Laboratório
+## Custos de Laboratório
 
 | Categoria               | Custo por hora | Custo mensal |
 |-------------------------|----------------|---------------|
