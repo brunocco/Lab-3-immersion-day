@@ -224,9 +224,93 @@ Você encontrará diversas ações que pode realizar em um objeto específico do
 <img src="assets/9.3.png">
 
 
+## Acessando objetos armazenados no S3
+Criando uma função do IAM para sua instância do EC2
+Nossa instância EC2 que criamos no início do laboratório é um servidor web que já foi configurado para visualizar nossos objetos. Precisaremos fornecer três coisas:
 
+- Permissão de acesso ao nosso novo bucket S3: Como nosso bucket S3 é privado, faremos isso criando uma política e anexando-a a uma função no serviço de Gerenciamento de Identidade e Acesso (IAM). 
+- O nome do nosso balde.
+- A região que hospeda nosso balde.
+- 
+1. Navegue até o console do serviço IAM .
+2. Primeiro, você criará uma política para sua função. Uma política de permissões define quais ações a função pode realizar e quais recursos ela pode usar. Para começar, selecione **Políticas** no menu à esquerda.
+3. Selecione o botão **Criar política** .
+<img src="assets/3.5.png">
 
+4. Na página "Especificar permissões", certifique-se de que o botão **Visual** "Editor de políticas" esteja selecionado e, em "Selecionar um serviço", selecione o **S3** no menu suspenso "Escolher um serviço".
+<img src="assets/4.5.png">
 
+5. Em "Ações permitidas", insira a pesquisa "Ações de filtro". Marque a caixa ao lado de "GetObject" apenas. GetObject restringirá nossa instância EC2 a ler apenas objetos dentro do seu bucket de imagens.GetObject
+<img src="assets/5.5.png">
 
+6. Adicionaremos o ARN do bucket S3 para restringir as permissões da política apenas a esse bucket. Em "Recursos", certifique-se de que **a opção Específica** esteja selecionada e clique no link **Adicionar ARNs** . (ARN significa "Nome do Recurso da Amazon")
+<img src="assets/6.6.png">
 
+7. Na caixa de diálogo que se abre, digite ou cole no campo "Nome do bucket de recursos".[your-bucket-name]
 
+8. No campo "Nome do objeto de recurso", marque a caixa de seleção ao lado de "Qualquer nome de objeto" e, em seguida, selecione o botão **Adicionar ARNs**.
+<img src="assets/8.5.png">
+
+9. Sua política agora deve ser semelhante à mostrada abaixo, exceto pelo nome do bucket no lugar de "abc-aws-s3-lab". Agora clique em **Avançar** .
+<img src="assets/9.4.png">
+
+10. Em "Revisar e criar", nomeie sua política e selecione Criar política .[your initials]-EC2-S3-Access
+<img src="assets/10.png">
+
+11. Em seguida, no menu à esquerda, selecione **Funções** .
+
+12. Clique no botão **Criar função** .
+
+13. Em "Tipo de entidade confiável", certifique-se de que o serviço AWS esteja selecionado e, em "Caso de uso", selecione EC2 .
+
+14. Em "Escolha um caso de uso para o serviço especificado", selecione **EC2** no menu suspenso e depois selecione o botão **Avançar** .
+<img src="assets/14.png">
+
+15. No campo "Políticas de filtro", procure por . Selecione a política que você criou nas etapas anteriores, **[suas iniciais]-EC2-S3-Access** , e selecione **Avançar** .S3
+<img src="assets/15.png">
+
+16. Nomeie sua função e selecione o botão **Criar função** .[your initials]-EC2-S3-Access-Role
+<img src="assets/16.png">
+
+## Anexe sua nova função à sua instância EC2
+Você criou com sucesso uma função que dará ao seu host web EC2 acesso para ler objetos no seu bucket S3. Você precisará anexá-la à sua instância EC2.
+
+1. Navegue até o console do serviço EC2 .
+
+2. Clique em **Instâncias** no menu à esquerda.
+
+3. Encontre sua instância chamada **[suas iniciais]-S3-Web-Host**.
+
+4. Clique com o botão direito do mouse na sua instância, selecione **Segurança** e, em seguida, **Modificar Função do IAM** . Isso também pode ser feito selecionando sua instância e clicando no botão **Ações**.
+<img src="assets/4.6.png">
+
+5. No menu suspenso "Função do IAM", selecione a função que você nomeou **[suas iniciais]-EC2-S3-Access-Role** e clique em **Atualizar função do IAM** .
+<img src="assets/5.6.png">
+
+6. Sua instância agora tem acesso de leitura ao seu bucket S3 privado.
+<img src="assets/6.7.png">
+
+## Visualize seus objetos em um navegador da Web
+Acesse a página "Instâncias" do EC2, selecione sua instância "[Suas Iniciais]-S3-Web-Host" e copie o endereço "DNS IPv4 Público" para a sua área de transferência clicando na imagem de dois quadrados sobrepostos à esquerda do Endereço DNS IPv4 Público. Cole este endereço em uma nova aba do seu navegador.
+
+>Abrindo a página da web
+>
+>1. Selecionar o link "abrir endereço" sob o título "DNS IPv4 público" pode impedir que você visualize seu site. O link "abrir endereço" usa https:// em vez de >http://, o que resultará em um erro, pois nosso host não foi configurado com um certificado SSL.
+>2. Ao colar seu endereço DNS, alguns navegadores podem adicionar automaticamente https:// antes do endereço. Pode ser necessário inserir manualmente https:// antes >do endereço DNS se estiver recebendo um erro de acesso.http://
+<img src="assets/6.8.png">
+
+1. Agora você deve ver a página "S3 Hands-On Lab", onde pode inserir as informações do seu bucket.
+
+2. Se precisar consultar o nome e a região do seu bucket, consulte a página de serviço do S3. A região deve ser inserida no formulário neste formato: por exemplo, us-west-2.
+<img src="assets/2.5.png">
+
+3. Insira o "Nome do Bucket" e a "Região da AWS" e clique em Enviar.
+<img src="assets/3.6.png">
+
+4. Após clicar em "Enviar", você verá as imagens que enviou anteriormente em uma pequena galeria. (A imagem com o X vermelho é intencional; atualizaremos esta imagem na seção de controle de versão do laboratório
+<img src="assets/4.7.png">
+
+Se você estiver interessado no que acontece nos bastidores: As imagens são lidas pelo seu navegador a partir do seu bucket privado do S3. Isso é feito criando uma URL pré-assinada para cada objeto (neste caso, os objetos são as imagens). O proprietário de um objeto pode compartilhá-los com outras pessoas criando uma URL pré-assinada, usando suas próprias credenciais de segurança, para conceder permissão por tempo limitado a esses objetos. Neste caso, as credenciais de segurança que passamos para o S3 são a função que criamos para nossa instância do EC2. Se você abrir uma das imagens diretamente no seu navegador, verá a URL pré-assinada, que é bem longa.
+
+Aqui está a arquitetura final do que construímos:
+<img src="assets/4.8.png">
