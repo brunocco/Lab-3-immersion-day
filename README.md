@@ -4,6 +4,28 @@ Passo a passo do Laboratório do evento Immersion day focado na criação e conf
 # Amazon S3 Hands-On Lab
 <img src="assets/s3-icon.png">
 
+## 📚 Sumário
+
+1. [Visão geral do Amazon S3](#visão-geral-do-amazon-s3)  
+2. [Objetivos do Laboratório](#este-laboratório-orientará-você-sobre-o-seguinte)  
+3. [Legenda do Texto do Laboratório](#legenda-do-texto-do-laboratório)  
+4. [Duração do Laboratório](#duração-do-laboratório)  
+5. [💰 Custos do Laboratório](#💰-custos-de-laboratório)  
+6. [Pré-requisitos](#pré-requisitos)  
+7. [Iniciando com CloudFormation](#baixe-e-inicie-o-modelo-cloudformation)  
+8. [Confirmando Instância EC2](#confirme-a-configuração-bem-sucedida-da-sua-instância)  
+9. [Criando um Bucket no S3](#criando-um-bucket-no-s3)  
+10. [Adicionando Objetos ao S3](#adicionando-objetos-ao-seu-bucket-s3)  
+11. [Trabalhando com Objetos no S3](#trabalhando-com-objetos-no-console-s3)  
+12. [Movendo Objetos dentro do S3](#movendo-um-objeto-no-s3)  
+13. [Acessando Objetos com EC2 + IAM](#acessando-objetos-armazenados-no-s3)  
+14. [Visualizando Objetos no Navegador](#visualize-seus-objetos-em-um-navegador-da-web)  
+15. [Habilitando Controle de Versão](#habilitando-o-controle-de-versão-do-bucket)  
+16. [Configurando Política de Ciclo de Vida](#configurando-uma-política-de-ciclo-de-vida)  
+17. [Recapitulação do Laboratório](#recapitulação-do-laboratório)  
+18. [Limpeza de Recursos](#limpeza-excluindo-os-objetos-e-o-bucket-s3)  
+19. [Conclusão](#conclusão)
+
 ## Visão geral do Amazon S3
 O Amazon Simple Storage Service (Amazon S3) é um serviço de armazenamento de objetos que oferece escalabilidade, disponibilidade de dados, segurança e desempenho líderes do setor. Ele pode ser usado para armazenar e recuperar qualquer quantidade de dados, a qualquer hora, de qualquer lugar na web.
 
@@ -427,8 +449,22 @@ Se você quiser excluir todos os objetos dentro de um bucket de uma só vez, voc
 
 4. A pilha levará alguns minutos para ser excluída. Selecione o botão de atualização para ver o status atualizado. A pilha não ficará mais visível após ser excluída.
 
-## Parabéns! Você concluiu o Laboratório Prático S3!
-Continue explorando mais recursos do S3
+## Conclusão
+Parabéns! 🎉 Você concluiu com sucesso o Laboratório Prático de Amazon S3 do AWS Immersion Day.
+
+Durante essa jornada prática, você:
+- Criou e configurou um bucket no Amazon S3;
+- Realizou upload de arquivos e organização com pastas (prefixos);
+- Trabalhou com ações em objetos como mover, copiar e editar metadados;
+- Configurou o acesso seguro entre uma instância EC2 e o S3 usando IAM;
+- Visualizou seus objetos armazenados diretamente em um site hospedado em EC2;
+- Ativou o versionamento de objetos no S3;
+- Criou uma política de ciclo de vida para gerenciar versões antigas;
+- E finalizou com a limpeza de recursos para evitar custos adicionais.
+
+Esse laboratório mostrou como o Amazon S3 pode ser usado não apenas como armazenamento de arquivos, mas como parte de uma arquitetura robusta, segura e escalável na nuvem.
+
+Continue explorando os recursos do S3 e experimente aplicá-los em outros projetos! 
 
 - [Você sabia que pode hospedar um site inteiramente no S3?](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html)
 
