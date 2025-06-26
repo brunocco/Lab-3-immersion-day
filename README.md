@@ -42,7 +42,6 @@ Se quiser visualizar as imagens carregadas no seu bucket S3 e ver o versionament
 
 ## Baixe e inicie o modelo CloudFormation
 
-Baixe o modelo CloudFormation aqui [Baixar S3-General-ID-Lab.yaml](https://github.com/brunocco/Lab-3-immersion-day/raw/main/Yaml para baixar/S3-General-ID-Lab.Yaml)
- e salve-o no seu disco rígido local.
+Baixe o modelo CloudFormation aqui [Baixar S3-General-ID-Lab.yaml](https://github.com/brunocco/Lab-3-immersion-day/raw/main/Yaml%20para%20baixar/S3-General-ID-Lab.Yaml) e salve-o no seu disco rígido local.
 
 Agora abra o CloudFormation serviço.
