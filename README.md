@@ -176,8 +176,52 @@ Aqui está a arquitetura que você construiu até agora:
 
 <img src="assets/7.4.png">
 
+## Trabalhando com objetos no console S3
 
+No console do S3, você pode trabalhar com objetos em uma interface gráfica.
+O console do S3 oferece muitos comandos familiares do sistema de arquivos. Você pode renomear, mover, copiar, excluir e visualizar, para citar alguns.
 
+Você também pode criar uma pasta (também conhecida como "prefixo"), adicionar ou remover metadados, editar a classe de armazenamento e copiar o URI ou URL do S3 do objeto. Abordaremos algumas dessas ações nesta seção do laboratório.
+<img src="assets/1.png">
+
+## Movendo um objeto no S3
+Com a ação de movimentação no console do S3, você pode mover um objeto para uma pasta (prefixo) no mesmo bucket, para outro bucket/prefixo ou para um ponto de acesso. Neste exemplo, criaremos uma nova pasta (prefixo) e moveremos o objeto photo7.jpg.
+
+1. Na página de visão geral do seu bucket, selecione o botão **Criar pasta**.
+
+2. No campo "Nome da pasta", insira o nome e clique no botão **Criar pasta**.photo7
+<img src="assets/2.4.png">
+
+3. Agora selecione o objeto "photo7.jpg", clique no menu suspenso **Ações** e selecione **Mover**.
+<img src="assets/3.4.png">
+
+4. Em "Tipo de destino", selecione **Bucket de uso geral** e clique em **Procurar S3**.
+<img src="assets/4.4.png">
+
+5. No pop-up "Destino", selecione a pasta **photo7/** (prefixo) e clique em **Escolher destino** .
+<img src="assets/5.4.png">
+
+6. Agora que o destino foi definido, você pode clicar no botão **Mover** para mover o objeto.
+<img src="assets/6.5.png">
+
+7. Você será levado para a página "Mover: status", que mostra que os objetos foram movidos com sucesso. Clique no botão **Fechar** para sair da página.
+<img src="assets/7.5.png">
+
+8. Agora você pode clicar na pasta "photo7/" e ver que "photo7.jpg" foi movido.
+>Mover um objeto cria uma cópia do objeto com configurações atualizadas e uma nova data da última modificação no local especificado e, em seguida, adiciona um marcador de exclusão ao objeto original.
+
+9. As etapas são semelhantes às de copiar um objeto, comece selecionando o objeto ou objetos e depois selecione **Ações** e **Copiar** .
+O comando "Mover" é um dos muitos comandos familiares do sistema de arquivos. Você também pode "Baixar" arquivos diretamente para o seu computador, "Renomear objetos" e "Abrir" diversos tipos de objetos diretamente no seu navegador.
+
+Ações de objetos específicos do S3
+Você encontrará diversas ações que pode realizar em um objeto específico do S3:
+
+- **Copiar URI do S3:** O URI do S3 atua como um endereço interno para acesso a buckets e objetos por alguns serviços da AWS.
+- **Copiar URL**: Mesmo que sejam privados, a menos que você os torne públicos, todos os buckets e objetos têm uma URL. Por exemplo, "photo1.jpg" no bucket "abc-aws-s3-lab" localizado na região "us-west-2" teria a URL "abc-aws-s3-lab.s3.us-west-2.amazonaws.com/photo1.jpg".
+- **Editar classe de armazenamento:** Isso altera a classe de armazenamento para o objeto, isso é melhor feito por uma política de ciclo de vida adequada ao caso de uso.
+- **Editar metadados**: os metadados do objeto são um conjunto de pares nome-valor associados ao objeto. Esta ação cria uma nova versão do objeto com configurações atualizadas e uma nova data da última modificação.
+- **Editar tags**: você pode marcar buckets ou objetos para rastrear custos de armazenamento ou outros critérios.
+<img src="assets/9.3.png">
 
 
 
