@@ -47,3 +47,142 @@ Se quiser visualizar as imagens carregadas no seu bucket S3 e ver o versionament
 2. Agora abra o CloudFormation serviço.
 <img src="assets/2-1.1-s3-lab-open-cf.png">
 
+3. No console do CloudFormation, selecione o botão **Criar pilha** e, em seguida, selecione **Com novos recursos (padrão)**.
+<img src="assets/3-1.2-s3-lab-cf-create-stack.png">
+
+4. Em "Especificar modelo", selecione **"Carregar um arquivo de modelo"** e, em seguida, selecione o botão **"Escolher arquivo"**. Selecione o arquivo de modelo "S3-General-ID-Lab.yaml" que você baixou na primeira etapa. Após selecionar o arquivo de modelo, clique no botão **"Avançar"**.
+<img src="assets/4-1.3-s3-lab-cf-choose-file.png">
+
+5. Na página Especificar detalhes da pilha, preencha os seguintes campos:
+
+a. Em "Nome da pilha", nomeie sua pilha .[Your Initials]-S3-Web-Host
+
+b. Você pode deixar "AmiID" como padrão, resultando no uso da versão mais recente desta AMI.
+
+c. Em "InstanceType", selecione **t2.micro** ( nível gratuito) ou você pode escolher m5.large se tiver algum problema com o t2.micro por qualquer motivo.
+
+d. Em "MeuIP", insira o endereço IP da sua máquina local seguido de . Isso bloqueará a porta HTTP 80 para a sua máquina. Você pode encontrar seu IP local usando este site:  [AWS Check IP/32](https://checkip.amazonaws.com/)
+
+>**Problemas de IP local**
+>
+>Se houver problemas para obter seu endereço IP local devido às configurações de segurança da sua máquina ou se ele mudar sempre que você atualizar o site "AWS Check >IP", será necessário usar 0.0.0.0/0. Lembre-se de que não é uma prática recomendada deixar a porta 80 aberta para o mundo em uma instância que não esteja por trás de >algo como um balanceador de carga.
+
+e. Em "MyVPC", selecione a VPC que deseja usar para configurar a instância. Na maioria das contas, a VPC padrão será uma boa escolha, mas em novas contas da AWS, será a única opção.
+
+f. Em "PublicSubnet", selecione uma sub-rede dentro da sua VPC que tenha acesso à internet. Uma sub-rede pública é definida por uma sub-rede que possui uma rota para o gateway de internet dentro de sua tabela de rotas. Por padrão, todas as sub-redes da VPC padrão são públicas.
+
+<img src="assets/5-1.4-s3-lab-cf-setup.png">
+
+6. Após inserir os detalhes acima, clique em Avançar . Na próxima página, "Configurar opções de pilha", você pode deixar "Tags", "Permissões" e "Opções avançadas" como padrão e selecionar Avançar .
+
+7. Na página Revisar [Suas Iniciais]-S3-Web-Host, revise suas configurações e clique em Enviar para começar a construir seu servidor web.
+
+8. Aguarde até que o "ID Lógico" "[Suas Iniciais]-S3-Web-Host" mostre o status "CREATE_COMPLETE". Você precisará clicar no botão de atualização para obter o status atualizado da sua pilha.
+<img src="assets/8-1.5-s3-lab-cf-complete.png">
+>A criação da pilha do CloudFormation deve ser concluída em cerca de 3 minutos.
+
+O script CloudFormation agora criou a arquitetura abaixo:
+<img src="assets/8-1-S3-Lab-step1.png">
+
+## Confirme a configuração bem-sucedida da sua instância
+1. Navegue até o console do serviço EC2 .
+
+2. Selecione Instâncias no menu à esquerda. Na página "Instâncias", selecione sua instância "[Suas Iniciais]-S3-Web-Host" e copie o endereço "DNS IPv4 Público" para a sua área de transferência clicando na imagem de dois quadrados sobrepostos à esquerda do Endereço DNS IPv4 Público. Cole este endereço em uma nova aba do seu navegador.
+
+>Abrindo a página da web
+>1. Você também precisará esperar que a "Verificação de status" mostre 3/3 verificações aprovadas antes de abrir a página da web.
+>2. Selecionar o link "abrir endereço" sob o título "DNS IPv4 público" pode impedir que você visualize seu site. O link "abrir endereço" usa https:// em vez de http://, o que resultará em um erro, pois nosso host não foi configurado com um certificado SSL.
+>3. Ao colar seu endereço DNS, alguns navegadores podem adicionar automaticamente https:// antes do endereço. Pode ser necessário inserir manualmente https:// antes do endereço DNS se estiver recebendo um erro de acesso.http://
+<img src="assets/2-2-2-21.6-copy-paste-public-dns.png">
+
+3. Agora você deve ver a página "Laboratório prático do S3", que usaremos mais tarde no laboratório.
+<img src="assets/3-21.7-s3-hands-on-lab-page.png">
+
+>Se a página não carregar, é recomendável que você espere até que a "Verificação de status" da sua instância mostre 3/3 verificações aprovadas e tente novamente.
+
+Agora você está pronto para iniciar o laboratório
+
+## Criando um bucket no S3
+
+Cada objeto no Amazon S3 é armazenado em um bucket. Antes de armazenar dados no Amazon S3, você precisa criar um bucket.
+> Você não é cobrado pela criação de um bucket; você só é cobrado pelo armazenamento de objetos no bucket e pela transferência de objetos para dentro e para fora do bucket.
+
+1. Navegue até o console do serviço S3 .
+
+2. Clique no botão **Criar bucket** e você será levado para a página "Criar bucket".
+<img src="assets/2.32.1-create-bucket-button.png">
+
+3. Em "Região da AWS", confirme se esta é a região que você está usando para o laboratório.
+
+4. Certifique-se de que **Uso geral** esteja selecionado para "Tipo de bucket".
+
+5. Digite um nome no campo **Nome do Bucket**.
+
+O nome do bucket escolhido deve ser único entre **todos os nomes de bucket existentes** no Amazon S3. Uma maneira de tornar o nome do seu bucket único é prefixar o nome do bucket com suas iniciais e o nome da sua organização. Por exemplo:**[your initials]-[your org]-s3-lab**
+
+Os nomes dos buckets devem atender aos seguintes requisitos:
+
+- Pode conter apenas letras **minúsculas**, números, pontos (.) e traços (-)
+- Deve começar com um número ou letra
+- Deve ter entre 3 e 255 caracteres
+- Não deve ser formatado como um endereço IP (por exemplo, 265.255.5.4)
+- Não pode conter espaços
+
+6. A próxima seção é "Bloquear configurações de acesso público para este bucket". Trabalharemos com um bucket privado, portanto, deixe **a opção Bloquear todo o acesso público** marcada. Você pode configurar seu bucket para acesso público, concedendo aos usuários e aplicativos direitos totais de leitura aos objetos dentro do bucket por meio de um endereço DNS exclusivo. Neste laboratório, não abriremos nossos buckets S3 ao público. É considerada uma prática recomendada da AWS não abrir seus buckets para acesso público, a menos que seja absolutamente necessário. Em uma seção posterior, abordaremos o processo de configuração de acesso aos seus objetos sem tornar o bucket público.
+
+7. Você pode deixar o restante das configurações como padrão por enquanto. Habilitaremos o versionamento em nosso bucket mais tarde no laboratório. Agora clique no botão Criar bucket 
+<img src="assets/7-2.2-bucket-settings.png">
+
+8. Agora você estará de volta à página que mostra todos os seus buckets S3. Clique no nome do bucket que você acabou de criar.
+<img src="assets/8.42.3-select-bucket-name.png">
+
+9. Agora você está na página de visão geral do seu bucket, ela deve mostrar seu bucket com Objetos (0).
+<img src="assets/9-2.4-empty-bucket.png">
+
+## Adicionando objetos ao seu bucket S3
+Agora que você criou um bucket, está pronto para adicionar objetos a ele.
+Um objeto pode ser qualquer tipo de arquivo: um arquivo de texto, uma foto, um vídeo, etc. Ao adicionar um arquivo ao Amazon S3, você tem a opção de incluir metadados com o arquivo e definir permissões para controlar o acesso ao arquivo.
+
+1. Você vai carregar 7 fotos no seu bucket. Baixe este arquivo zip e extraia as fotos para o seu disco rígido local: [baixe aqui photos.zipl](https://github.com/brunocco/Lab-3-immersion-day/raw/main/photos/photos.zip) 
+
+2. No seu arquivo zip, confirme que você tem sete arquivos chamados "photo1.jpg" a "photo7.jpg" e um diretório chamado "V2" contendo um arquivo chamado "photo1.jpg".
+
+3. Na página de visão geral do seu novo bucket, clique em **Upload** na aba "Objetos".
+<img src="assets/3-4-3.1-bucket-empty.png">
+
+4. Em seguida, clique no botão **Adicionar Arquivos** para selecionar os arquivos a serem enviados. Envie os arquivos "photo1.jpg" a "photo7.jpg" da raiz da pasta "photos", ignorando "photo1.jpg" na pasta "V2", pois o usaremos em uma seção posterior deste laboratório.
+<img src="assets/4-3-3.2-upload-empty.png">
+
+5. Depois de selecionar os arquivos de imagem, a caixa de diálogo "Upload" deverá mostrar os arquivos que você selecionou para upload.
+<img src="assets/5-2-3.3-upload-with-files.png">
+
+Na parte inferior da página, você pode clicar nas setas ao lado de "Permissões e propriedades" para explorar as opções adicionais para carregar esses arquivos.
+<img src="assets/5.3-3.4-additional-upload-options.png">
+
+6. Com essas opções de upload, você pode definir sua classe de armazenamento, criptografia, tags, metadados, etc. Dependendo do seu caso de uso, você pode escolher outras classes de armazenamento, mas para este laboratório, usaremos a classe de armazenamento Padrão. Todas as outras configurações podem ser deixadas com os valores padrão.
+Clique no botão **Upload** na parte inferior da página.
+<img src="assets/6.23.5-upload-objects.png">
+
+Você deverá ver suas imagens sendo carregadas no topo da página:
+<img src="assets/6.3.png">
+
+Quando o upload estiver concluído, você deverá ver "Upload bem-sucedido":
+<img src="assets/6.4.png">
+
+7. Agora clique em **Fechar** para retornar à página de visão geral do bucket. Você deverá ver todas as sete fotos no seu bucket que agora são objetos do S3.
+<img src="assets/7.3.png">
+
+Aqui está a arquitetura que você construiu até agora:
+
+<img src="assets/7.4.png">
+
+
+
+
+
+
+
+
+
+
+
