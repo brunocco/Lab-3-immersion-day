@@ -314,3 +314,127 @@ Se você estiver interessado no que acontece nos bastidores: As imagens são lid
 
 Aqui está a arquitetura final do que construímos:
 <img src="assets/4.8.png">
+
+
+## Habilitando o controle de versão do bucket
+O versionamento é um meio de manter múltiplas variantes de um objeto no mesmo bucket. Você pode usar o versionamento para preservar, recuperar e restaurar todas as versões de cada objeto armazenado no seu bucket do Amazon S3. Com o versionamento, você pode se recuperar facilmente de ações não intencionais do usuário e de falhas no aplicativo.
+
+>Você habilita e suspende o versionamento no nível do bucket. Após habilitar o versionamento de um bucket, ele nunca mais poderá retornar ao estado sem >versionamento. Mas você só pode suspender o versionamento nesse bucket.
+
+1. No console S3, Clique no link **"Buckets"** no menu à esquerda. Clique no nome do bucket que você criou anteriormente no laboratório e selecione a aba **"Propriedades"**. Em "Controle de Versão do Bucket", selecione o botão **"Editar"**.
+<img src="assets/1.2.png">
+
+2. Selecione o botão de **opção Ativar** e clique em **Salvar alterações**.
+<img src="assets/2.6.png">
+
+O controle de versão do bucket agora deve ser exibido como "Habilitado"
+<img src="assets/2.7.png">
+
+3. Agora volte para a aba "Objetos" e selecione o botão **Upload**.
+
+4. Acesse a pasta com os arquivos de imagem que você baixou anteriormente no laboratório e carregue o arquivo "photo1.jpg" da pasta "V2" para o seu bucket S3, como fez nas etapas anteriores. Certifique-se de carregar o arquivo **photo1.jpg** na mesma pasta do arquivo **photo1.jpg original**.
+<img src="assets/4.9.png">
+
+5. À primeira vista, o conteúdo do seu bucket não parece ter mudado, exceto pela data e hora da "Última modificação" para photo1.jpg. (Que deve mostrar uma data/hora mais recente do que as outras imagens)
+<img src="assets/5.7.png">
+Acima do conteúdo do bucket, você verá um botão de alternância chamado "Mostrar versões". Gire o botão para exibir todas as versões dos objetos no seu bucket.
+
+6. Agora você deve ver uma coluna "ID da versão" e duas versões diferentes de "photo1.jpg". A versão mais recente terá um "ID da versão" exclusivo e todos os IDs de versão do objeto original serão "nulos". O "photo1.jpg" mais recente será o objeto usado quando o arquivo for acessado.
+<img src="assets/6.9.png">
+
+7. Agora retorne e **atualize** a página "S3 Hands-On Lab". Você verá que a nova versão de "photo1.jpg" não está mais coberta por um X vermelho. A versão mais antiga do objeto permanece no seu bucket caso precise ser baixada ou restaurada posteriormente.
+<img src="assets/7.6.png">
+Ao habilitar o Controle de Versão, ele aceitará, por padrão, um número ilimitado de versões de um objeto. Uma maneira de gerenciar as versões do seu objeto é configurando uma Política de Ciclo de Vida, o que faremos na próxima seção.
+
+## Configurando uma Política de Ciclo de Vida
+Você pode usar políticas de ciclo de vida para definir ações que você deseja que o Amazon S3 execute durante a vida útil de um objeto, por exemplo, transferir objetos para outra classe de armazenamento, arquivar objetos ou excluir objetos após um período especificado.
+
+Um bucket com controle de versão habilitado pode ter várias versões do mesmo objeto, uma versão atual e nenhuma ou mais versões desatualizadas (anteriores). Usando uma política de ciclo de vida, você pode definir ações específicas para as versões atuais e desatualizadas do objeto.
+
+Vamos configurar uma política de ciclo de vida que moverá versões não atuais (anteriores) dos seus objetos para a camada de acesso infrequente (IA) do S3 após 30 dias e as excluirá 30 dias depois.
+
+1. Na página de visão geral do seu bucket, selecione a guia **Gerenciamento** .
+
+2. Em "Regras de ciclo de vida", selecione o botão **"Criar regra de ciclo de vida"** . Isso abrirá a página "Criar regra de ciclo de vida".
+<img src="assets/2.8.png">
+
+3. Dê um nome à sua regra e selecione o escopo como **"Esta regra se aplica a todos os objetos no bucket"** e marque a caixa de **seleção** para confirmar o aviso. Poderíamos configurar regras mais refinadas com base no prefixo ou nas tags do objeto, mas, neste laboratório, aplicaremos isso a todo o bucket.[your initials] - S3 Lifecycle policy
+
+4. Em "Ações de regras de ciclo de vida", marque a caixa ao lado de **Mover versões não atuais** de objetos entre classes de armazenamento e **Excluir permanentemente versões não atuais** de objetos . Selecionar uma ação para uma versão "não atual" significa que essas ações ocorrerão na versão mais antiga do objeto quando ela for substituída por uma versão mais recente.
+
+5. Em "Transição de versões não atuais de objetos entre classes de armazenamento", selecione **Standard-IA** para "Escolher transições de classe de armazenamento". Insira "Dias após os objetos se tornarem não atuais".30
+
+Esta parte da regra moverá todos os objetos do S3-Standard para o S3-IA, 30 dias após a versão anterior. Esta regra pode ser útil para economizar custos no S3 se os arquivos enviados forem acessados ​​com frequência nos primeiros 30 dias, mas apenas ocasionalmente após os primeiros 30 dias.
+
+6. Em "Excluir permanentemente versões não atuais de objetos", insira . Isso excluirá um objeto 60 dias após ele se tornar uma versão anterior (30 dias após ser movido para S3-IA).60
+
+7. Na parte inferior, você verá um resumo da linha do tempo da regra que acabou de configurar. Selecione **Criar regra** quando terminar de revisar o resumo.
+<img src="assets/7.7.png">
+
+8. Agora você tem uma política de ciclo de vida que moverá versões anteriores dos seus objetos para o S3-IA após 30 dias e os excluirá 30 dias depois.
+<img src="assets/8.6.png">
+
+## Recapitulação do laboratório
+Neste laboratório, você aprendeu a criar um bucket do Amazon S3, fazer upload de arquivos e trabalhar com os objetos no bucket. Em seguida, você criou uma política de IAM para sua instância do EC2, concedendo a ela acesso ao bucket S3 criptografado privado, permitindo que ela leia os arquivos de imagem no bucket para a página de índice do site hospedado. Em seguida, você concluiu o laboratório configurando o versionamento do bucket com uma política de ciclo de vida.
+
+## Limpeza: Excluindo os objetos e o bucket S3
+Excluindo seus objetos (incluindo versões diferentes) e seu bucket
+
+A exclusão de objetos e buckets pode ser feita programaticamente pela API ou pelo console. Se você não precisar mais do bucket e dos objetos que enviou para este laboratório, exclua-os para não incorrer em cobranças adicionais sobre esses objetos.
+
+Você poderia percorrer o balde e excluir cada arquivo individualmente, mas isso é desnecessário quando podemos excluir todos eles com uma única ação.
+
+Excluir todos os objetos usando o recurso Esvaziar balde
+Se você quiser excluir todos os objetos dentro de um bucket de uma só vez, você pode usar a opção Esvaziar no console do S3:
+
+1. No console do S3, selecione o **botão de opção** à esquerda do seu bucket e depois selecione o botão **Esvaziar**.
+<img src="assets/1.3.png">
+
+2. Você será levado para a página "Esvaziar balde", onde serão exibidos vários avisos e será necessário preencher o campo de confirmação. Após inserir os dados, você poderá clicar no botão **"Esvaziar"** para remover todos os objetos permanentemente.permanently delete
+<img src="assets/2.9.png">
+
+3. Você será levado para a página "Esvaziar bucket: status" com uma mensagem informando que você esvaziou seu bucket com sucesso. Clique em **Sair** para retornar ao console do S3.
+<img src="assets/3.7.png">
+
+## Exclua seu bucket
+1. No console do S3, clique no seu bucket chamado [nome-do-seu-bucket] para abrir a página de visão geral.
+<img src="assets/1.4.png">
+
+2. Seu bucket deve estar vazio. Clique no botão "Mostrar Versões" para confirmar que não há versões anteriores de objetos no seu bucket.
+<img src="assets/2.10.png">
+
+3.Retorne à página "Buckets" no console do S3, selecione o **botão de opção** à esquerda do seu bucket e, em seguida, selecione o botão **Excluir** .
+<img src="assets/3.8.png">
+
+4. Na página "Excluir bucket", você precisará digitar no campo de entrada de texto e clicar em **Excluir bucket** .[your-bucket-name]
+<img src="assets/4.10.png">
+
+5. Após a exclusão, você retornará à página de buckets do S3 com a mensagem "Buckle [nome-do-seu-bucket] excluído com sucesso".
+<img src="assets/5.8.png">
+>Duas coisas que você precisa ter em mente antes de excluir seu bucket:
+>
+>1. A exclusão de um bucket não pode ser desfeita.
+>2. Os nomes dos buckets são únicos. Se você excluir um bucket, outro usuário da AWS poderá usar o nome.
+
+## Excluindo sua pilha do CloudFormation
+1. No console, abra o CloudFormation em serviços ou com pesquisa.
+
+2. Selecione a pilha chamada **[Suas iniciais]-S3-Web-Host** e depois o botão **Excluir** .
+<img src="assets/2.11.png">
+
+3. No pop-up, selecione **Excluir pilha**.
+<img src="assets/3.10.png">
+
+4. A pilha levará alguns minutos para ser excluída. Selecione o botão de atualização para ver o status atualizado. A pilha não ficará mais visível após ser excluída.
+
+## Parabéns! Você concluiu o Laboratório Prático S3!
+Continue explorando mais recursos do S3
+
+- [Você sabia que pode hospedar um site inteiramente no S3?](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html)
+
+- [Você pode implementar um controle de acesso muito granular ao seu bucket com uma política de bucket do S3.](https://docs.aws.amazon.com/AmazonS3/latest/userguide/add-bucket-policy.html)
+
+- [Você também pode configurar a cópia automática e assíncrona de objetos entre buckets.](https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-example-walkthroughs.html)
+
+- [Explore as diferentes classes de armazenamento no S3.](https://aws.amazon.com/pt/s3/storage-classes/)
+
